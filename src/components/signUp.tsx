@@ -23,10 +23,24 @@ export default function SignUp() {
     return () => authListener?.subscription?.unsubscribe();
   }, []);
 
+  const getURL = () => {
+    let url =
+      import.meta.env.SITE_URL ?? // Set this to your site URL in production env.
+      "http://localhost:5173/";
+    // Make sure to include `https://` when not localhost.
+    url = url.startsWith("http") ? url : `https://${url}`;
+    // Make sure to include a trailing `/`.
+    url = url.endsWith("/") ? url : `${url}/`;
+    return url;
+  };
+
   const handleGoogleSignUp = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: getURL(),
+      },
     });
 
     if (error) {
@@ -80,7 +94,7 @@ export default function SignUp() {
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 px-6 py-3 text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {/* ... (el contenido del botón permanece igual) */}
+              {loading ? "Loading..." : "Sign Out"}
             </button>
           </div>
         ) : (
@@ -89,7 +103,7 @@ export default function SignUp() {
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {/* ... (el contenido del botón permanece igual) */}
+            {loading ? "Loading..." : "Sign Up with Google"}
           </button>
         )}
       </div>
