@@ -23,24 +23,10 @@ export default function SignUp() {
     return () => authListener?.subscription?.unsubscribe();
   }, []);
 
-  const getURL = () => {
-    let url =
-      import.meta.env.SITE_URL ?? // Set this to your site URL in production env.
-      "http://localhost:5173/";
-    // Make sure to include `https://` when not localhost.
-    url = url.startsWith("http") ? url : `https://${url}`;
-    // Make sure to include a trailing `/`.
-    url = url.endsWith("/") ? url : `${url}/`;
-    return url;
-  };
-
   const handleGoogleSignUp = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: getURL(),
-      },
     });
 
     if (error) {
