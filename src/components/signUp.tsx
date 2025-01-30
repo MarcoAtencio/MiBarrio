@@ -15,7 +15,7 @@ export default function SignUp() {
     getSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event: AuthChangeEvent, session: Session | null) => {
+      (_event: AuthChangeEvent, session: Session | null) => {
         setUser(session?.user || null);
       }
     );
